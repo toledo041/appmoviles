@@ -1,6 +1,8 @@
 import 'package:example_flutter/my_home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:example_flutter/text_box.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 
 class ModifyContact extends StatefulWidget {
   final Client _client;
@@ -13,6 +15,41 @@ class _ModifyContact extends State<ModifyContact> {
   TextEditingController controllerName = new TextEditingController();
   TextEditingController controllerSurname = new TextEditingController();
   TextEditingController controllerPhone = new TextEditingController();
+  String idCliente = "";
+
+  Future actualizar() async {
+    var url = Uri.http("10.0.0.8:8080", '/flutter_login/actualizacontacto.php',
+        {'q': '{http}'});
+    var response = await http.post(url, body: {
+      "name": controllerName.text,
+      "surname": controllerSurname.text,
+      "phone": controllerPhone.text,
+      "id": idCliente //int.parse(idCliente)
+    });
+    var data = response.body; //json.decode(response.body);
+    print("actualizo?  " + data.toString());
+    if (data.toString() == "exito") {
+      /*Fluttertoast.showToast(
+        msg: 'Se modificó correctamente',
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        toastLength: Toast.LENGTH_SHORT,
+      );*/
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MyHomePage("Listado de contactos"), //const()
+        ),
+      );
+    } else {
+      Fluttertoast.showToast(
+        backgroundColor: Color.fromARGB(255, 240, 229, 228),
+        textColor: Colors.white,
+        msg: 'Hubo un problema al actualizar la información',
+        toastLength: Toast.LENGTH_SHORT,
+      );
+    }
+  }
 
   @override
   void initState() {
@@ -20,7 +57,9 @@ class _ModifyContact extends State<ModifyContact> {
     controllerName = new TextEditingController(text: c.name);
     controllerSurname = new TextEditingController(text: c.surname);
     controllerPhone = new TextEditingController(text: c.phone);
+    idCliente = c.id;
     super.initState();
+    print('Id contacto ${idCliente}');
   }
 
   @override
@@ -41,8 +80,9 @@ class _ModifyContact extends State<ModifyContact> {
                 String phone = controllerPhone.text;
 
                 if (name.isNotEmpty && surname.isNotEmpty && phone.isNotEmpty) {
-                  Navigator.pop(context,
-                      new Client(name: name, surname: surname, phone: phone));
+                  actualizar();
+                  /*Navigator.pop(context,
+                      new Client(name: name, surname: surname, phone: phone));*/
                 }
               },
               child: Text("Guardar Contacto")),

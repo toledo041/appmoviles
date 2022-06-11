@@ -1,4 +1,4 @@
-import 'package:example_flutter/my_home_page.dart';
+//import 'package:example_flutter/my_home_page_casi_original.dart';
 import 'package:example_flutter/text_box.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -10,20 +10,18 @@ class RegisterContact extends StatefulWidget {
   State<StatefulWidget> createState() => _RegisterContact();
 }
 
-
 class _RegisterContact extends State<RegisterContact> {
   TextEditingController controllerName = new TextEditingController();
   TextEditingController controllerSurname = new TextEditingController();
   TextEditingController controllerPhone = new TextEditingController();
 
-Future registrar() async {
-    var url =
-        Uri.http("10.0.0.8:8080", '/flutter_login/registrarcontacto.php', {'q': '{http}'});
+  Future registrar() async {
+    var url = Uri.http("10.0.0.8:8080", '/flutter_login/registrarcontacto.php',
+        {'q': '{http}'});
     var response = await http.post(url, body: {
       "name": controllerName.text,
       "surname": controllerSurname.text,
-	  "phone": controllerPhone.text,
-	  
+      "phone": controllerPhone.text,
     });
     var data = response.body; //json.decode(response.body);
     if (data.toString() == "exito") {
@@ -36,19 +34,18 @@ Future registrar() async {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => MyHomePage("Listado de contactos"),//const()
+          builder: (context) => MyHomePage("Listado de contactos"), //const()
         ),
       );
     } else {
       Fluttertoast.showToast(
         backgroundColor: Color.fromARGB(255, 240, 229, 228),
         textColor: Colors.white,
-        msg: 'Nombre de usuario y contraseña inválidos',
+        msg: 'Hubo un problema al guardar la información',
         toastLength: Toast.LENGTH_SHORT,
       );
     }
   }
-
 
   @override
   void initState() {
@@ -78,9 +75,9 @@ Future registrar() async {
                   if (name.isNotEmpty &&
                       surname.isNotEmpty &&
                       phone.isNotEmpty) {
-					  registrar();
-                   //Navigator.pop(context,
-                     //   new Client(name: name, surname: surname, phone: phone));
+                    registrar();
+                    Navigator.pop(context,
+                        new Client(name: name, surname: surname, phone: phone));
                   }
                 },
                 child: Text("Guardar Contacto")),
