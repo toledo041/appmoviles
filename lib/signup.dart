@@ -19,7 +19,7 @@ class _SignUpState extends State<SignUp> {
 
   Future register() async {
     var url = Uri.http(
-        "192.168.1.67", '/flutter_login/register.php', {'q': '{http}'});
+        "10.0.0.8:8080", '/flutter_login/register.php', {'q': '{http}'});
     var response = await http.post(url, body: {
       "username": user.text.toString(),
       "password": pass.text.toString(),
