@@ -25,8 +25,9 @@ class _MyHomePage extends State<MyHomePage> {
 
   Future consulta() async {
     print('entra!');
+    contactos.clear();
     var url =
-        Uri.http("10.0.0.8:8080", '/flutter_login/lista.php', {'q': '{http}'});
+        Uri.http("10.235.242.107:8080", '/flutter_login/lista.php', {'q': '{http}'});
     var response = await http.get(url);
     var data = json.decode(response.body);
     //print(data);
@@ -41,7 +42,7 @@ class _MyHomePage extends State<MyHomePage> {
             id: data[i]['id']));
 
         //print(contactos.toString());
-        setState(() {}); //Con esto se redibuja el componente
+        //Con esto se redibuja el componente
       }
 
       //Navigator.push(
@@ -58,11 +59,12 @@ class _MyHomePage extends State<MyHomePage> {
         toastLength: Toast.LENGTH_SHORT,
       );
     }
+    setState(() {});
   }
 
   Future elimina(id) async {
     var url = Uri.http(
-        "10.0.0.8:8080", '/flutter_login/borracontacto.php', {'q': '{http}'});
+        "10.235.242.107:8080", '/flutter_login/borracontacto.php', {'q': '{http}'});
     var response = await http.post(url, body: {"id": id});
     var data = response.body;
     //print(data);
@@ -73,6 +75,8 @@ class _MyHomePage extends State<MyHomePage> {
         msg: 'Registro eliminado con éxito',
         toastLength: Toast.LENGTH_SHORT,
       );
+
+      setState(() {});
     } else {
       Fluttertoast.showToast(
         backgroundColor: Color.fromARGB(255, 240, 229, 228),
@@ -80,6 +84,7 @@ class _MyHomePage extends State<MyHomePage> {
         msg: 'No se pudo eliminar el registro',
         toastLength: Toast.LENGTH_SHORT,
       );
+      setState(() {});
     }
   }
 
@@ -98,6 +103,7 @@ class _MyHomePage extends State<MyHomePage> {
                       context,
                       MaterialPageRoute(
                           builder: (_) => ModifyContact(contactos[index])))
+                  .whenComplete(consulta)
                   .then((newContact) {
                 if (newContact != null) {
                   setState(() {
@@ -133,6 +139,7 @@ class _MyHomePage extends State<MyHomePage> {
         onPressed: () {
           Navigator.push(
                   context, MaterialPageRoute(builder: (_) => RegisterContact()))
+              .whenComplete(consulta)
               .then((newContact) {
             if (newContact != null) {
               setState(() {

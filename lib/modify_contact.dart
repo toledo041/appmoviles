@@ -18,36 +18,51 @@ class _ModifyContact extends State<ModifyContact> {
   String idCliente = "";
 
   Future actualizar() async {
-    var url = Uri.http("10.0.0.8:8080", '/flutter_login/actualizacontacto.php',
-        {'q': '{http}'});
-    var response = await http.post(url, body: {
-      "name": controllerName.text,
-      "surname": controllerSurname.text,
-      "phone": controllerPhone.text,
-      "id": idCliente //int.parse(idCliente)
-    });
-    var data = response.body; //json.decode(response.body);
-    print("actualizo?  " + data.toString());
-    if (data.toString() == "exito") {
-      /*Fluttertoast.showToast(
+    try {
+      var url = Uri.http("10.235.242.107:8080", '/flutter_login/actualizacontacto.php',
+          {'q': '{http}'});
+      var response = await http.post(url, body: {
+        "name": controllerName.text,
+        "surname": controllerSurname.text,
+        "phone": controllerPhone.text,
+        "id": idCliente //int.parse(idCliente)
+      });
+      var data = response.body; //json.decode(response.body);
+      print("actualizo?  " + data.toString());
+      if (data.toString() == "exito") {
+        /*Fluttertoast.showToast(
         msg: 'Se modificó correctamente',
         backgroundColor: Colors.green,
         textColor: Colors.white,
         toastLength: Toast.LENGTH_SHORT,
-      );*/
+      );
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => MyHomePage("Listado de contactos"), //const()
         ),
-      );
-    } else {
+      );*/
+        Navigator.of(context).pop();
+        setState(() {});
+      } else {
+        Fluttertoast.showToast(
+          backgroundColor: Color.fromARGB(255, 240, 229, 228),
+          textColor: Colors.white,
+          msg: 'Hubo un problema al actualizar la información',
+          toastLength: Toast.LENGTH_SHORT,
+        );
+        Navigator.of(context).pop();
+        setState(() {});
+      }
+    } catch (e) {
       Fluttertoast.showToast(
         backgroundColor: Color.fromARGB(255, 240, 229, 228),
         textColor: Colors.white,
         msg: 'Hubo un problema al actualizar la información',
         toastLength: Toast.LENGTH_SHORT,
       );
+      Navigator.of(context).pop();
+      setState(() {});
     }
   }
 
