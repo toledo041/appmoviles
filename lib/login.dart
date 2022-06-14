@@ -15,8 +15,8 @@ class _LoginPageState extends State<Login> {
   TextEditingController user = TextEditingController();
   TextEditingController pass = TextEditingController();
   Future login() async {
-    var url =
-        Uri.http("10.235.242.107:8080", '/flutter_login/check.php', {'q': '{http}'});
+    var url = Uri.http(
+        "10.235.242.107:8080", '/flutter_login/check.php', {'q': '{http}'});
     var response = await http.post(url, body: {
       "username": user.text,
       "password": pass.text,
